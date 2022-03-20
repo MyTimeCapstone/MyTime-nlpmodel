@@ -9,6 +9,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB,MultinomialNB
 from sklearn.metrics import accuracy_score,hamming_loss
 from skmultilearn.problem_transform import BinaryRelevance
+from skmultilearn.problem_transform import ClassifierChain
 
 #cleaning text methods
 stopwords = nltk.corpus.stopwords.words('english')
@@ -58,10 +59,7 @@ X_train,X_test,y_train,y_test = train_test_split(Xfeatures,clean_file[categories
 
 model = BinaryRelevance(MultinomialNB())
 model.fit(X_train,y_train)
-BinaryRelevance(classifier=MultinomialNB(alpha=1.0, class_prior=None,
-                                         fit_prior=True),
-                require_dense=[True, True])
-prediction = model.predict(X_test)
-prediction.toarray()
 
-pickle.dump(model, open('model_deployment/model.pkl', "wb"))
+prediction = model.predict(X_test)
+
+pickle.dump(model, open('model_deployment/model.pkl', 'wb'))
