@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from flask import Flask, request, jsonify
 import nltk, string, pickle
+nltk.download('stopwords')
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 app = Flask(__name__)
