@@ -1,15 +1,12 @@
 #import all packagaes
+from turtle import shape
 import pandas as pd
-from sklearn.feature_extraction import _stop_words
-import nltk
-import string
-import pickle
+import nltk, string, pickle
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
-from sklearn.naive_bayes import GaussianNB,MultinomialNB
+from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score,hamming_loss
 from skmultilearn.problem_transform import BinaryRelevance
-from skmultilearn.problem_transform import ClassifierChain
 
 #cleaning text methods
 stopwords = nltk.corpus.stopwords.words('english')
@@ -50,9 +47,9 @@ with open('sample_data.csv', encoding='utf-8') as sample_data:
     df = pd.DataFrame(temp_array, columns=[each])
     clean_file=pd.concat([clean_file, df], axis=1)
 
-# Instantiate the CountVectorizer method
-tfidf = TfidfVectorizer()
-Xfeatures = tfidf.fit_transform(clean_file['description']).toarray()
+# Instantiate the TfidfVectorizer method
+tfid = TfidfVectorizer()
+Xfeatures = tfid.fit_transform(clean_file['description']).toarray()
 
 # split into training and testing sets
 X_train,X_test,y_train,y_test = train_test_split(Xfeatures,clean_file[categories],test_size=0.2, random_state=959)
@@ -62,4 +59,5 @@ model.fit(X_train,y_train)
 
 prediction = model.predict(X_test)
 
-pickle.dump(model, open('model_deployment/model.pkl', 'wb'))
+pickle.dump(model, open('model.pkl', 'wb'))
+pickle.dump(tfid, open('vectorizer.pkl', 'wb'))
