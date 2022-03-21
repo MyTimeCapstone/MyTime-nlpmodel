@@ -131,4 +131,4 @@ dmypy.json
 # Model files
 naive_bayes.ipynb
 nlp.py
-train_model.py
+model_comparison*.py
