@@ -24,7 +24,7 @@ with open("skills.txt", "r") as skills_file:
 
 @app.route('/')
 def home():
-    return None
+    return "home"
 
 @app.route('/predict', methods=['POST'])
 def predict():
