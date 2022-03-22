@@ -48,7 +48,7 @@ def predict():
         #return array of objects
             return jsonify(final_array)
     
-    except Exception e:
+    except Exception as e:
         return e
 
 if __name__ == "__main__":
