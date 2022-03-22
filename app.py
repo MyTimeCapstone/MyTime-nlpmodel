@@ -30,23 +30,26 @@ def home():
 @app.route('/predict', methods=['POST'])
 def predict():
     final_array=[]
-    descriptions = pd.DataFrame([str(x['description']) for x in request.json])
+    try:
+        descriptions = pd.DataFrame([str(x['description']) for x in request.json])
+        #clean text
+        descriptions = descriptions[0].apply(lambda a: clean_text(str(a.strip())))
+        vectorizer_transform = vectorizer.transform(descriptions).toarray()
+        prediction = model.predict(vectorizer_transform)
     
-    #clean text
-    descriptions = descriptions[0].apply(lambda a: clean_text(str(a.strip())))
-    vectorizer_transform = vectorizer.transform(descriptions).toarray()
-    prediction = model.predict(vectorizer_transform)
+        #convert binary numbers to category values
+        for j, each in enumerate(prediction.toarray()):
+            temp_array=[]
+            for i in range(len(each)):
+                if each[i] == 1:
+                    temp_array.append(categories[i])
+            final_array.append({"id": request.json[j]['id'], "skills": temp_array})
+
+        #return array of objects
+            return jsonify(final_array)
     
-    #convert binary numbers to category values
-    for j, each in enumerate(prediction.toarray()):
-        temp_array=[]
-        for i in range(len(each)):
-            if each[i] == 1:
-                temp_array.append(categories[i])
-        final_array.append({"id": request.json[j]['id'], "skills": temp_array})
-    
-    #return array of objects
-    return jsonify(final_array)
+    except Exception e:
+        return e
 
 if __name__ == "__main__":
     app.run(debug=True)
